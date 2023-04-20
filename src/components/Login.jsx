@@ -1,6 +1,29 @@
+import '../styles/form.css'
+import { useContext } from 'react'
+import { Context } from '../context/context'
+import axios from 'axios'
+
 export function Login () {
+  const { isFecthing, loginStart, loginSuccess, loginFailure } = useContext(Context)
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    loginStart()
+
+    const { username, password } = Object.fromEntries(new window.FormData(event.target))
+    try {
+      const res = await axios.post('/api/auth/login', {
+        username,
+        password
+      })
+      loginSuccess(res.data)
+    } catch (error) {
+      loginFailure()
+    }
+  }
+
   return (
-    <form className='form'>
+    <form className='form' onSubmit={handleSubmit}>
       <h3>Login</h3>
       <ul className='inner-form'>
         <li>
@@ -12,7 +35,7 @@ export function Login () {
           <input name='password' type='password' id='password' />
         </li>
       </ul>
-      <button type='submit'>
+      <button className='loginButton' type='submit' disabled={isFecthing}>
         Ingresar
       </button>
     </form>

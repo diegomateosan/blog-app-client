@@ -1,29 +1,29 @@
+import { useContext } from 'react'
 import './App.css'
-import { HomePage } from './Pages/HomePage'
-import { Header } from './components/Header'
-import { Login } from './components/Login'
-import { NewPost } from './components/NewPost'
-import { Register } from './components/Register'
-import { SettingsProfile } from './components/SettingsProfile'
-import { SinglePost } from './components/SinglePost'
 import {
   BrowserRouter as Router,
   Routes,
   Route
 } from 'react-router-dom'
+import { Context } from './context/context'
+import { RegisterPage } from './Pages/RegisterPage'
+import { LoginPage } from './Pages/LoginPage'
+import { SettingsProfilePage } from './Pages/SettingsProfilePage'
+import { SinglePostPagePage } from './Pages/SinglePostPage'
+import { HomePage } from './Pages/HomePage'
+import { CreatePostPage } from './Pages/CreatePostPage'
 
 function App () {
-  const user = false
+  const { user } = useContext(Context)
   return (
     <Router>
-      <Header />
       <Routes>
         <Route path='/' element={<HomePage />} />
-        <Route path='/register' element={user ? <HomePage /> : <Register />} />
-        <Route path='/login' element={user ? <HomePage /> : <Login />} />
-        <Route path='/newpost' element={user ? <NewPost /> : <Register />} />
-        <Route path='/settings' element={user ? <SettingsProfile /> : <Register />} />
-        <Route path='/post/:postId' element={<SinglePost />} />
+        <Route path='/register' element={user ? <HomePage /> : <RegisterPage />} />
+        <Route path='/login' element={user ? <HomePage /> : <LoginPage />} />
+        <Route path='/newpost' element={user ? <CreatePostPage /> : <RegisterPage />} />
+        <Route path='/settings' element={user ? <SettingsProfilePage /> : <RegisterPage />} />
+        <Route path='/post/:postId' element={<SinglePostPagePage />} />
       </Routes>
     </Router>
   )

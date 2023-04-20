@@ -1,0 +1,19 @@
+.posts-list {
+  max-width: 1200px;
+  padding: 0 32px;
+  margin: 0 auto;
+  margin-top: 24px;
+  columns: 5 320px;
+  column-gap: 10px;
+}
+
+.post-list-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 316.813px);
+  max-width: 1200px;
+  padding: 0 32px;
+  margin: 0 auto;
+  margin-top: 24px;
+}

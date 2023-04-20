@@ -1,0 +1,26 @@
+footer {
+  margin-top: auto;
+  text-align: center;
+  padding: 42px 0;
+}
+
+.icon {
+  background-color: #646cff;
+  border-radius: 50%;
+  padding: 1px;
+  width: 15px;
+  cursor: pointer;
+}
+
+a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: #646cff;
+}
+
+a:hover {
+  color: (#fff);
+  transition: color 0.8s ease;
+}

@@ -1,16 +1,29 @@
-import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Context } from '../context/context'
+import { PUBLIC_FOLDER } from '../consts'
 
-// TODO: Hacer un topbar center y un tobar right
 export function NavBar () {
-  const user = false
+  const { user, logout } = useContext(Context)
+  const location = useLocation()
+
   return (
     <nav className='nav'>
-      <a href='/' className='logo'>Post it</a>
+      <Link className='logo' to='/'>Post it</Link>
       <ul className='nav-list'>
-        <li><Link className='link' to='/'>Inicio</Link></li>
-        <li>Usuarios</li>
         <li>
-          <Link className='link' to='/newpost'>Escribir</Link>
+          <NavLink
+            className={`link ${location.pathname === '/' && 'active-link'}`}
+            to='/'
+          >Inicio
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            className={`link ${location.pathname === '/newpost' && 'active-link'}`}
+            to='/newpost'
+          >Escribir
+          </NavLink>
         </li>
       </ul>
       {user
@@ -18,16 +31,29 @@ export function NavBar () {
           <ul className='nav-list'>
             <li>
               <Link className='link' style={{ display: 'flex', alignItems: 'center' }} to='/settings'>
-                <img src='https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' alt='' style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+                {
+                  user.profilePic !== '' ? (<img src={`${PUBLIC_FOLDER}${user.profilePic}`} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} alt={user.username} />) : (<img src='https://img.freepik.com/free-icon/user_318-875902.jpg' style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} alt={user.username} />)
+                }
+
               </Link>
             </li>
-            <li>LOGOUT</li>
+            <li><button className='logout' onClick={logout}>Cerrar Sesión</button></li>
           </ul>
           )
         : (
           <ul className='nav-list'>
-            <li><Link className='link' to='/login'>Login</Link></li>
-            <li><Link className='link' to='/register'>Registrarse</Link></li>
+            <li>
+              <NavLink
+                className={`link ${location.pathname === '/login' && 'active-link'}`}
+                to='/login'
+              >
+                Login
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className={`link ${location.pathname === '/register' && 'active-link'}`} to='/register'>Registrarse
+              </NavLink>
+            </li>
           </ul>
           )}
     </nav>
