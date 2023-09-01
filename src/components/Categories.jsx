@@ -1,17 +1,8 @@
-import axios from 'axios'
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useCategories } from '../hooks/useCategories'
 
 export function Categories () {
-  const [categories, setCategories] = useState([])
-
-  useEffect(() => {
-    const getCategories = async () => {
-      const res = await axios.get('/api/categories')
-      setCategories(res.data)
-    }
-    getCategories()
-  }, [])
+  const { categories } = useCategories()
 
   return (
     <section className='categories'>

@@ -1,6 +1,6 @@
 import '../styles/form.css'
-import axios from 'axios'
 import { useState } from 'react'
+import { registerUser } from '../services/user.service'
 
 export function Register () {
   const [error, setError] = useState(false)
@@ -10,12 +10,9 @@ export function Register () {
     setError(false)
     const { username, email, password } = Object.fromEntries(new window.FormData(event.target))
     try {
-      const res = await axios.post('/api/auth/register', {
-        username,
-        email,
-        password
+      registerUser({ username, email, password }).then(res => {
+        res.data && window.location.replace('/login')
       })
-      res.data && window.location.replace('/login')
     } catch (error) {
       setError(true)
     }

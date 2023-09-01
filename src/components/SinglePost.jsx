@@ -1,64 +1,33 @@
-import '../styles/newpost.css'
-import axios from 'axios'
-import { useContext, useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import '../styles/singlepost.css'
+import { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Context } from '../context/context'
 import { PUBLIC_FOLDER } from '../consts'
+import { deletePost, updatePost } from '../services/post.service'
+import { usePost } from '../hooks/usePost'
 
 export function SinglePost () {
   const { user } = useContext(Context)
-  const location = useLocation()
+  const { title, setTitle, description, setDescription, categories, categoryValues, setCategoryValues, post } = usePost()
   const navigate = useNavigate()
-
-  const path = location.pathname.split('/')[2]
-  const [post, setPost] = useState([])
   const [updateMode, setUpdateMode] = useState(false)
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [categories, setCategories] = useState([])
-  const [categoryValues, setCategoryValues] = useState([])
-
-  useEffect(() => {
-    const getPost = async () => {
-      const res = await axios.get(`/api/posts/${path}`)
-      setPost(res.data)
-      setTitle(res.data.title)
-      setDescription(res.data.description)
-      setCategoryValues(res.data.categories)
-    }
-    getPost()
-  }, [path])
-
-  useEffect(() => {
-    try {
-      const getCategories = async () => {
-        const res = await axios.get('/api/categories')
-        setCategories(res.data)
-      }
-      getCategories()
-    } catch (error) {}
-  }, [setCategories])
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`/api/posts/${post._id}`, {
-        data: { username: user.username }
-      })
+      deletePost({ post, username: user.username })
       navigate('/')
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`/api/posts/${post._id}`, {
-        username: user.username,
-        title,
-        description,
-        categories: categoryValues
-      })
-
+      updatePost({ post, username: user.username, title, description, categories })
       setUpdateMode(false)
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const handleChange = (event) => {

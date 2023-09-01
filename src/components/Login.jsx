@@ -1,7 +1,7 @@
 import '../styles/form.css'
 import { useContext } from 'react'
 import { Context } from '../context/context'
-import axios from 'axios'
+import { loginUser } from '../services/user.service'
 
 export function Login () {
   const { isFecthing, loginStart, loginSuccess, loginFailure } = useContext(Context)
@@ -9,14 +9,9 @@ export function Login () {
   const handleSubmit = async (event) => {
     event.preventDefault()
     loginStart()
-
     const { username, password } = Object.fromEntries(new window.FormData(event.target))
     try {
-      const res = await axios.post('/api/auth/login', {
-        username,
-        password
-      })
-      loginSuccess(res.data)
+      loginUser({ username, password }).then(res => loginSuccess(res.data))
     } catch (error) {
       loginFailure()
     }

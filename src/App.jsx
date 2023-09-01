@@ -8,10 +8,10 @@ import {
 import { Context } from './context/context'
 import { RegisterPage } from './Pages/RegisterPage'
 import { LoginPage } from './Pages/LoginPage'
-import { SettingsProfilePage } from './Pages/SettingsProfilePage'
-import { SinglePostPagePage } from './Pages/SinglePostPage'
+import { SettingsProfilePage } from './pages/SettingsProfilePage'
+import { SinglePostPagePage } from './pages/SinglePostPage'
 import { HomePage } from './Pages/HomePage'
-import { CreatePostPage } from './Pages/CreatePostPage'
+import { CreatePostPage } from './pages/CreatePostPage'
 
 function App () {
   const { user } = useContext(Context)

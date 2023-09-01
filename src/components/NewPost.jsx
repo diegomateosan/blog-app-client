@@ -1,50 +1,21 @@
 import '../styles/newpost.css'
-import axios from 'axios'
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState } from 'react'
 import { Context } from '../context/context'
 import { useNavigate } from 'react-router-dom'
+import { createPost } from '../services/post.service'
+import { useCategories } from '../hooks/useCategories'
 
 export function NewPost () {
   const { user } = useContext(Context)
   const [file, setFile] = useState('')
-  const [categories, setCategories] = useState([])
+  const { categories } = useCategories()
   const [categoryValues, setCategoryValues] = useState([])
   const navigate = useNavigate()
-
-  useEffect(() => {
-    try {
-      const getCategories = async () => {
-        const res = await axios.get('/api/categories')
-        setCategories(res.data)
-      }
-      getCategories()
-    } catch (error) {}
-  }, [])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     const { title, description } = Object.fromEntries(new window.FormData(event.target))
-    const newPost = {
-      username: user.username,
-      title,
-      description,
-      categories: categoryValues
-    }
-    if (file) {
-      const data = new FormData()
-      const filename = Date.now() + file.name
-      data.append('name', filename)
-      data.append('file', file)
-      newPost.photo = filename
-      try {
-        await axios.post('/api/upload', data)
-      } catch (error) {}
-    }
-
-    try {
-      const res = await axios.post('/api/posts', newPost)
-      navigate(`/post/${res.data._id}`)
-    } catch (error) {}
+    createPost({ username: user.username, title, description, categoryValues, file }).then(res => navigate(`/post/${res.data._id}`))
   }
 
   const handleChange = (event) => {
@@ -78,11 +49,9 @@ export function NewPost () {
                     {category.name}
                   </label>
                 </div>
-
               ))
             }
           </div>
-
           <textarea className='writingDesc' name='description' placeholder='¿Qué deseas escribir?' />
           <button type='submit'>
             Publicar

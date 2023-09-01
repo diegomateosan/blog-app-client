@@ -1,40 +1,18 @@
 import '../styles/settingsprofile.css'
 import { useContext, useState } from 'react'
 import { Context } from '../context/context'
-import axios from 'axios'
 import { PUBLIC_FOLDER } from '../consts'
+import { updateUser } from '../services/user.service'
 
 export function SettingsProfile () {
-  const { user, updateStart, updateSuccess, updateFailure } = useContext(Context)
+  const { user, updateStart } = useContext(Context)
   const [file, setFile] = useState('')
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     updateStart()
     const { username, email, password } = Object.fromEntries(new window.FormData(event.target))
-    const updatedUser = {
-      userId: user._id,
-      username,
-      email,
-      password
-    }
-    if (file) {
-      const data = new FormData()
-      const filename = Date.now() + file.name
-      data.append('name', filename)
-      data.append('file', file)
-      updatedUser.profilePic = filename
-      try {
-        await axios.post('/api/upload', data)
-      } catch (error) {}
-    }
-    try {
-      const res = await axios.put(`/api/users/${user._id}`, updatedUser)
-      updateSuccess(res.data)
-      window.location.reload()
-    } catch (error) {
-      updateFailure()
-    }
+    updateUser({ userId: user._id, username, email, password, file })
   }
 
   return (
